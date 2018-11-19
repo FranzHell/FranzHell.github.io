@@ -26,7 +26,7 @@ function setup() {
   learningRate: 0.0001,
   hiddenUnits: 400,
   epochs: 40,
-  numClasses: 2,
+  numClasses: 3,
   batchSize: 0.4,
 });
 featureExtractor.numClasses=3

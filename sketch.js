@@ -24,7 +24,7 @@ function setup() {
   topk: 3,
   learningRate: 0.0001,
   hiddenUnits: 200,
-  epochs: 20,
+  epochs: 40,
   numClasses: 2,
   batchSize: 0.4,
 });

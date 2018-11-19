@@ -10,6 +10,7 @@ let video;
 let loss;
 let sleepImages = 0;
 let awakeImages = 0;
+let distractedImages = 0;
 
 function setup() {
   noCanvas();
@@ -19,13 +20,14 @@ function setup() {
   video.parent('videoContainer');
   // Extract the already learned features from MobileNet
   featureExtractor = ml5.featureExtractor('MobileNet', modelReady,{   
+  featureExtractor.numClasses=3  
   version: 1,
   alpha: 1.0,
   topk: 3,
   learningRate: 0.0001,
   hiddenUnits: 400,
   epochs: 40,
-  numClasses: 2,
+  numClasses: 3,
   batchSize: 0.4,
 });
   // Create a new classifier using those features and give the video we want to use
@@ -68,6 +70,14 @@ function setupButtons() {
   buttonB.mousePressed(function() {
     classifier.addImage('awake');
     select('#amountOfAwakeImages').html(awakeImages++);
+  });
+
+  // When the distracted button is pressed, add the current frame
+  // from the video with a label of "distracted" to the classifier
+  buttonC = select('#distractedButton');
+  buttonC.mousePressed(function() {
+    classifier.addImage('distracted');
+    select('#amountOfDistractedImages').html(distractedImages++);
   });
 
   // Train Button

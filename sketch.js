@@ -1,14 +1,13 @@
-let charRNN;
+let lstm;
 let textInput;
 let tempSlider;
 let lengthSlider;
-let runningInference = false;
 
 function setup() {
   noCanvas();
 
   // Create the LSTM Generator passing it the model directory
-  charRNN = ml5.charRNN('models/woolf/', modelReady);
+  lstm = ml5.LSTMGenerator('models/woolf/', modelReady);
 
   // Grab the DOM elements
   textInput = select('#textInput');
@@ -26,46 +25,39 @@ function modelReady() {
 }
 
 function generate() {
-  // prevent starting inference if we've already started another instance
-  // TODO: is there better JS way of doing this?
- if(!runningInference) {
-   runningInference = true;
+  // Update the status log
+  select('#status').html('Generating...');
 
-    // Update the status log
-    select('#status').html('Generating...');
+  // Update the length and temperature span elements
+  select('#length').html(lengthSlider.value());
+  select('#temperature').html(tempSlider.value());
 
-    // Update the length and temperature span elements
-    select('#length').html(lengthSlider.value());
-    select('#temperature').html(tempSlider.value());
+  // Grab the original text
+  let original = textInput.value();
+  // Make it to lower case
+  let txt = original.toLowerCase();
 
-    // Grab the original text
-    let original = textInput.value();
-    // Make it to lower case
-    let txt = original.toLowerCase();
+  // Check if there's something
+  if (txt.length > 0) {
+    // Here is the data for the LSTM generator
+    let data = {
+      seed: txt,
+      temperature: tempSlider.value(),
+      length: lengthSlider.value()
+    };
 
-    // Check if there's something
-    if (txt.length > 0) {
-      // Here is the data for the LSTM generator
-      let data = {
-        seed: txt,
-        temperature: tempSlider.value(),
-        length: lengthSlider.value()
-      };
+    // Generate text with the lstm
+    lstm.generate(data, gotData);
 
-      // Generate text with the charRNN
-      charRNN.generate(data, gotData);
-
-      // Update the DOM elements with typed and generated text
-      function gotData(err, result) {
-        select('#status').html('Ready!');
-        select('#original').html(original);
-        select('#prediction').html(result.sample);
-        runningInference = false;
-      }
-    } else {
-      // Clear everything
-      select('#original').html('');
-      select('#prediction').html('');
+    // Update the DOM elements with typed and generated text
+    function gotData(err, result) {
+      select('#status').html('Ready!');
+      select('#original').html(original);
+      select('#prediction').html(result);
     }
+  } else {
+    // Clear everything
+    select('#original').html('');
+    select('#prediction').html('');
   }
 }

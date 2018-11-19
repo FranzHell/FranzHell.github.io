@@ -10,7 +10,7 @@ let video;
 let loss;
 let sleepImages = 0;
 let awakeImages = 0;
-let birdImages=0;
+let attentImages=0;
 
 function setup() {
   noCanvas();
@@ -73,10 +73,10 @@ function setupButtons() {
     select('#amountOfAwakeImages').html(awakeImages++);
   });
 
-  buttonC = select('#birdButton');
+  buttonC = select('#attentButton');
   buttonC.mousePressed(function() {
-    addImage('bird');
-    select('#amountOfBirdImages').html(birdImages++);
+    addImage('attent');
+    select('#amountOfAttentImages').html(attentImages++);
   });
 
 

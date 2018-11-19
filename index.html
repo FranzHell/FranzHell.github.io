@@ -84,16 +84,17 @@ h3{
 
 <body>
   <h2>Image Classification using Feature Extraction with MobileNet. Built with p5.js and ml5.js, based on tensorflow.js</h2>
-  <h3>Train a Neural Network to guess if you have your eyes closed or not</h3>
+  <h3>Train a Neural Network to guess if you have your eyes closed or not.</h3>
+ 
   <p><div id="videoContainer" style="width:500px; margin:0 auto;"></div></p>
   <h6><span id="modelStatus">Loading base model...</span>
   
 <span id="videoStatus">Loading video...</span></h6>
   <p>
     <button id="sleepButton">sleep</button>
-    <span id="amountOfSleepImages">0</span> Sleep training images</p>
+    <span id="amountOfSleepImages">0</span> Sleep training images. Close your eyes and start training. Record different angles to the camera.</p>
     <p><button id="awakeButton">swake</button>
-    <span id="amountOfAwakeImages">0</span> Awake training images</p>
+    <span id="amountOfAwakeImages">0</span> Awake training images. Open your eyes and start training. Record different angles to the camera.</p>
   </p>
   <p><button id="train">Train</button><span id="loss"></span> Train model</p>
  

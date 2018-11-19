@@ -8,8 +8,8 @@ let featureExtractor;
 let classifier;
 let video;
 let loss;
-let SleepImages = 0;
-let AwakeImages = 0;
+let sleepImages = 0;
+let awakeImages = 0;
 
 function setup() {
   noCanvas();
@@ -56,18 +56,18 @@ function classify() {
 function setupButtons() {
   // When the sleep button is pressed, add the current frame
   // from the video with a label of "sleep" to the classifier
-  buttonA = select('#SleepButton');
+  buttonA = select('#sleepButton');
   buttonA.mousePressed(function() {
-    classifier.addImage('Sleep');
-    select('#amountOfSleepImages').html(SleepImages++);
+    classifier.addImage('sleep');
+    select('#amountOfSleepImages').html(sleepImages++);
   });
 
   // When the awake button is pressed, add the current frame
   // from the video with a label of "awake" to the classifier
-  buttonB = select('#AwakeButton');
+  buttonB = select('#awakeButton');
   buttonB.mousePressed(function() {
-    classifier.addImage('Awake');
-    select('#amountOfAwakeImages').html(AwakeImages++);
+    classifier.addImage('awake');
+    select('#amountOfAwakeImages').html(awakeImages++);
   });
 
   // Train Button

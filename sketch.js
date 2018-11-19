@@ -10,7 +10,6 @@ let video;
 let loss;
 let sleepImages = 0;
 let awakeImages = 0;
-let attentImages=0;
 
 function setup() {
   noCanvas();
@@ -26,11 +25,9 @@ function setup() {
   learningRate: 0.0001,
   hiddenUnits: 400,
   epochs: 40,
-  numClasses: 3,
+  numClasses: 2,
   batchSize: 0.4,
 });
-featureExtractor.numClasses=3
-
   // Create a new classifier using those features and give the video we want to use
   classifier = featureExtractor.classification(video, videoReady);
   // Set up the UI buttons
@@ -72,13 +69,6 @@ function setupButtons() {
     classifier.addImage('awake');
     select('#amountOfAwakeImages').html(awakeImages++);
   });
-
-  buttonC = select('#attentButton');
-  buttonC.mousePressed(function() {
-    addImage('attent');
-    select('#amountOfAttentImages').html(attentImages++);
-  });
-
 
   // Train Button
   train = select('#train');

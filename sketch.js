@@ -58,7 +58,7 @@ function setupButtons() {
   // from the video with a label of "cat" to the classifier
   buttonA = select('#catButton');
   buttonA.mousePressed(function() {
-    classifier.addImage('cat');
+    classifier.addImage('Yga Pose A');
     select('#amountOfCatImages').html(catImages++);
   });
 
@@ -66,7 +66,7 @@ function setupButtons() {
   // from the video with a label of "dog" to the classifier
   buttonB = select('#dogButton');
   buttonB.mousePressed(function() {
-    classifier.addImage('dog');
+    classifier.addImage('Yoga Pose B');
     select('#amountOfDogImages').html(dogImages++);
   });
 

@@ -73,7 +73,7 @@ function setupButtons() {
   });
 
   // When the distracted button is pressed, add the current frame
-  // from the video with a label of "awake" to the classifier
+  // from the video with a label of "distracted" to the classifier
   buttonC = select('#distractedButton');
   buttonC.mousePressed(function() {
     classifier.addImage('distracted');

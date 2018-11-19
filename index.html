@@ -16,6 +16,7 @@
     padding: 3px;
     font-weight: lighter;
     font-size: 14px;
+
   }
   video{
     width: 300;
@@ -26,6 +27,7 @@
     padding: 3px;
     font-weight: lighter;
     font-size: 14px;
+
     align="center"
   }
   videoContainer{
@@ -56,6 +58,7 @@
     padding: 3px;
     font-weight: lighter;
     font-size: 14px;
+
 	}
   h2{
     max-width: 500px;
@@ -64,6 +67,7 @@
     padding: 3px;
     font-weight: lighter;
     font-size: 14px;
+
 	}  
 h3{
     max-width: 500px;
@@ -72,23 +76,24 @@ h3{
     padding: 3px;
     font-weight: lighter;
     font-size: 14px;
+
 	}
+
   </style>
 </head>
 
 <body>
   <h2>Image Classification using Feature Extraction with MobileNet. Built with p5.js and ml5.js, based on tensorflow.js</h2>
-  <h3>Train a Neural Network to guess if you have your eyes closed or not.</h3>
- 
+  <h3>Train a Neural Network to guess if you have your eyes closed or not</h3>
   <p><div id="videoContainer" style="width:500px; margin:0 auto;"></div></p>
   <h6><span id="modelStatus">Loading base model...</span>
   
 <span id="videoStatus">Loading video...</span></h6>
   <p>
     <button id="sleepButton">sleep</button>
-    <span id="amountOfSleepImages">0</span> Sleep training images. Close your eyes and start training. Record different angles to the camera.</p>
+    <span id="amountOfSleepImages">0</span> Sleep training images</p>
     <p><button id="awakeButton">awake</button>
-    <span id="amountOfAwakeImages">0</span> Awake training images. Open your eyes and start training. Record different angles to the camera.</p>
+    <span id="amountOfAwakeImages">0</span> Awake training images</p>
   </p>
   <p><button id="train">Train</button><span id="loss"></span> Train model</p>
  

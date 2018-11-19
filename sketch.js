@@ -56,18 +56,18 @@ function classify() {
 function setupButtons() {
   // When the Cat button is pressed, add the current frame
   // from the video with a label of "cat" to the classifier
-  buttonA = select('#catButton');
+  buttonA = select('#YogaAButton');
   buttonA.mousePressed(function() {
-    classifier.addImage('Yga Pose A');
-    select('#amountOfCatImages').html(catImages++);
+    classifier.addImage('YogaA');
+    select('#amountOfYogaAImages').html(YogaAImages++);
   });
 
   // When the Dog button is pressed, add the current frame
   // from the video with a label of "dog" to the classifier
-  buttonB = select('#dogButton');
+  buttonB = select('#YogaBButton');
   buttonB.mousePressed(function() {
-    classifier.addImage('Yoga Pose B');
-    select('#amountOfDogImages').html(dogImages++);
+    classifier.addImage('YogaB');
+    select('#amountOfYogaBImages').html(YogaBImages++);
   });
 
   // Train Button

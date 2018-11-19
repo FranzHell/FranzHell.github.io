@@ -10,6 +10,7 @@ let video;
 let loss;
 let sleepImages = 0;
 let awakeImages = 0;
+let birdImages=0;
 
 function setup() {
   noCanvas();
@@ -28,6 +29,8 @@ function setup() {
   numClasses: 2,
   batchSize: 0.4,
 });
+featureExtractor.numClasses=3
+
   // Create a new classifier using those features and give the video we want to use
   classifier = featureExtractor.classification(video, videoReady);
   // Set up the UI buttons
@@ -69,6 +72,13 @@ function setupButtons() {
     classifier.addImage('awake');
     select('#amountOfAwakeImages').html(awakeImages++);
   });
+
+  buttonC = select('#birdButton');
+  buttonC.mousePressed(function() {
+    addImage('bird');
+    select('#amountOfBirdImages').html(birdImages++);
+  });
+
 
   // Train Button
   train = select('#train');

@@ -23,7 +23,7 @@ function setup() {
   alpha: 1.0,
   topk: 3,
   learningRate: 0.0001,
-  hiddenUnits: 200,
+  hiddenUnits: 300,
   epochs: 40,
   numClasses: 2,
   batchSize: 0.4,

@@ -14,100 +14,109 @@
  * limitations under the License.
  * =============================================================================
  */
+import * as tf from '@tensorflow/tfjs';
 
-import renderChart from 'vega-embed';
+const CONTROLS = ['up', 'down', 'left', 'right'];
+const CONTROL_CODES = [38, 40, 37, 39];
 
-import {linearRegressionModel, multiLayerPerceptronRegressionModel1Hidden, multiLayerPerceptronRegressionModel2Hidden, run} from '.';
+export function init() {
+  document.getElementById('controller').style.display = '';
+  statusElement.style.display = 'none';
+}
 
+const trainStatusElement = document.getElementById('train-status');
+
+// Set hyper params from UI values.
+const learningRateElement = document.getElementById('learningRate');
+export const getLearningRate = () => +learningRateElement.value;
+
+const batchSizeFractionElement = document.getElementById('batchSizeFraction');
+export const getBatchSizeFraction = () => +batchSizeFractionElement.value;
+
+const epochsElement = document.getElementById('epochs');
+export const getEpochs = () => +epochsElement.value;
+
+const denseUnitsElement = document.getElementById('dense-units');
+export const getDenseUnits = () => +denseUnitsElement.value;
 const statusElement = document.getElementById('status');
-export const updateStatus = (message) => {
-  statusElement.value = message;
-};
 
-const baselineStatusElement = document.getElementById('baselineStatus');
-export const updateBaselineStatus = (message) => {
-  baselineStatusElement.value = message;
-};
+export function startPacman() {
+  google.pacman.startGameplay();
+}
 
-// const weightsElement = document.getElementById('modelInspectionOutput');
-const NUM_TOP_WEIGHTS_TO_DISPLAY = 5;
-/**
- * Updates the weights output area to include information about the weights
- * learned in a simple linear model.
- * @param {List} weightsList list of objects with 'value':number and 'description':string
- */
-export const updateWeightDescription = (weightsList) => {
-  const inspectionHeadlineElement =
-      document.getElementById('inspectionHeadline');
-  inspectionHeadlineElement.value =
-      `Top ${NUM_TOP_WEIGHTS_TO_DISPLAY} weights by magnitude`;
-  // Sort weights objects by descending absolute value.
-  weightsList.sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
-  var table = document.getElementById('myTable');
-  // Clear out table contents
-  table.innerHTML = '';
-  // Add new rows to table.
-  weightsList.forEach((weight, i) => {
-    if (i < NUM_TOP_WEIGHTS_TO_DISPLAY) {
-      let row = table.insertRow(-1);
-      let cell1 = row.insertCell(0);
-      let cell2 = row.insertCell(1);
-      if (weight.value < 0) {
-        cell2.setAttribute('class', 'negativeWeight');
-      } else {
-        cell2.setAttribute('class', 'positiveWeight');
-      }
-      cell1.innerHTML = weight.description;
-      cell2.innerHTML = weight.value.toFixed(4);
-    }
-  });
-};
+export function predictClass(classId) {
+  google.pacman.keyPressed(CONTROL_CODES[classId]);
+  document.body.setAttribute('data-active', CONTROLS[classId]);
+}
 
-export const setup = async () => {
-  const trainSimpleLinearRegression = document.getElementById('simple-mlr');
-  const trainNeuralNetworkLinearRegression1Hidden =
-      document.getElementById('nn-mlr-1hidden');
-  const trainNeuralNetworkLinearRegression2Hidden =
-      document.getElementById('nn-mlr-2hidden');
+export function isPredicting() {
+  statusElement.style.visibility = 'visible';
+}
+export function donePredicting() {
+  statusElement.style.visibility = 'hidden';
+}
+export function trainStatus(status) {
+  trainStatusElement.innerText = status;
+}
 
-  trainSimpleLinearRegression.addEventListener('click', async (e) => {
-    const model = linearRegressionModel();
-    losses = [];
-    await run(model, true);
-  }, false);
+export let addExampleHandler;
+export function setExampleHandler(handler) {
+  addExampleHandler = handler;
+}
+let mouseDown = false;
+const totals = [0, 0, 0, 0];
 
-  trainNeuralNetworkLinearRegression1Hidden.addEventListener(
-      'click', async () => {
-        const model = multiLayerPerceptronRegressionModel1Hidden();
-        losses = [];
-        await run(model, false);
-      }, false);
+const upButton = document.getElementById('up');
+const downButton = document.getElementById('down');
+const leftButton = document.getElementById('left');
+const rightButton = document.getElementById('right');
 
-  trainNeuralNetworkLinearRegression2Hidden.addEventListener(
-      'click', async () => {
-        const model = multiLayerPerceptronRegressionModel2Hidden();
-        losses = [];
-        await run(model, false);
-      }, false);
-};
+const thumbDisplayed = {};
 
-let losses = [];
-export const plotData = async (epoch, trainLoss, valLoss) => {
-  losses.push({'epoch': epoch, 'loss': trainLoss, 'split': 'Train Loss'});
-  losses.push({'epoch': epoch, 'loss': valLoss, 'split': 'Validation Loss'});
+async function handler(label) {
+  mouseDown = true;
+  const className = CONTROLS[label];
+  const button = document.getElementById(className);
+  const total = document.getElementById(className + '-total');
+  while (mouseDown) {
+    addExampleHandler(label);
+    document.body.setAttribute('data-active', CONTROLS[label]);
+    total.innerText = totals[label]++;
+    await tf.nextFrame();
+  }
+  document.body.removeAttribute('data-active');
+}
 
-  const spec = {
-    '$schema': 'https://vega.github.io/schema/vega-lite/v2.json',
-    'width': 250,
-    'height': 250,
-    'data': {'values': losses},
-    'mark': 'line',
-    'encoding': {
-      'x': {'field': 'epoch', 'type': 'quantitative'},
-      'y': {'field': 'loss', 'type': 'quantitative'},
-      'color': {'field': 'split', 'type': 'nominal'}
-    }
-  };
+upButton.addEventListener('mousedown', () => handler(0));
+upButton.addEventListener('mouseup', () => mouseDown = false);
 
-  return renderChart('#plot', spec, {actions: false});
+downButton.addEventListener('mousedown', () => handler(1));
+downButton.addEventListener('mouseup', () => mouseDown = false);
+
+leftButton.addEventListener('mousedown', () => handler(2));
+leftButton.addEventListener('mouseup', () => mouseDown = false);
+
+rightButton.addEventListener('mousedown', () => handler(3));
+rightButton.addEventListener('mouseup', () => mouseDown = false);
+
+export function drawThumb(img, label) {
+  if (thumbDisplayed[label] == null) {
+    const thumbCanvas = document.getElementById(CONTROLS[label] + '-thumb');
+    draw(img, thumbCanvas);
+  }
+}
+
+export function draw(image, canvas) {
+  const [width, height] = [224, 224];
+  const ctx = canvas.getContext('2d');
+  const imageData = new ImageData(width, height);
+  const data = image.dataSync();
+  for (let i = 0; i < height * width; ++i) {
+    const j = i * 4;
+    imageData.data[j + 0] = (data[i * 3 + 0] + 1) * 127;
+    imageData.data[j + 1] = (data[i * 3 + 1] + 1) * 127;
+    imageData.data[j + 2] = (data[i * 3 + 2] + 1) * 127;
+    imageData.data[j + 3] = 255;
+  }
+  ctx.putImageData(imageData, 0, 0);
 }

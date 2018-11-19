@@ -8,8 +8,8 @@ let featureExtractor;
 let classifier;
 let video;
 let loss;
-let dogImages = 0;
-let catImages = 0;
+let SleepImages = 0;
+let AwakeImages = 0;
 
 function setup() {
   noCanvas();
@@ -54,20 +54,20 @@ function classify() {
 
 // A util function to create UI buttons
 function setupButtons() {
-  // When the Cat button is pressed, add the current frame
-  // from the video with a label of "cat" to the classifier
-  buttonA = select('#YogaAButton');
+  // When the sleep button is pressed, add the current frame
+  // from the video with a label of "sleep" to the classifier
+  buttonA = select('#SleepButton');
   buttonA.mousePressed(function() {
-    classifier.addImage('YogaA');
-    select('#amountOfYogaAImages').html(YogaAImages++);
+    classifier.addImage('Sleep');
+    select('#amountOfSleepImages').html(SleepImages++);
   });
 
-  // When the Dog button is pressed, add the current frame
-  // from the video with a label of "dog" to the classifier
-  buttonB = select('#YogaBButton');
+  // When the awake button is pressed, add the current frame
+  // from the video with a label of "awake" to the classifier
+  buttonB = select('#AwakeButton');
   buttonB.mousePressed(function() {
-    classifier.addImage('YogaB');
-    select('#amountOfYogaBImages').html(YogaBImages++);
+    classifier.addImage('Awake');
+    select('#amountOfAwakeImages').html(AwakeImages++);
   });
 
   // Train Button
